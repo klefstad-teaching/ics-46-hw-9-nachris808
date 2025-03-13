@@ -1,6 +1,7 @@
 #include "dijkstras.h"
 #include <queue>
 #include <utility>
+#include <functional>
 #include <vector>
 
 vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& previous){
@@ -9,7 +10,7 @@ vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& prev
     vector<bool> visited(numVertices,false);
     distances[source] = 0;
     previous[source] = -1;
-    priority_queue<pair<int, int>> minHeap;
+    priority_queue<pair<int, int>,vector<pair<int, int>>, std::greater<int>> minHeap; //<vertex,weight>
     minHeap.push({source,0});
     while (!minHeap.empty()){
         int u = minHeap.top().first;
@@ -28,13 +29,15 @@ vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& prev
     }    
     return distances;
 }
+
 vector<int> extract_shortest_path(const vector<int>& distances, const vector<int>& previous, int destination){
-    
+
 }
+
 void print_path(const vector<int>& v, int total){
     for (auto i : v){
         cout << v[i] << " ";
     }
     cout << endl;
-    cout << "Total cost is " << total;
+    cout << "Total cost is " << total << endl;
 }
