@@ -1,4 +1,5 @@
 #include "dijkstras.h"
+#include <algorithm>
 #include <queue>
 #include <utility>
 #include <functional>
@@ -10,16 +11,19 @@ vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& prev
     vector<bool> visited(numVertices,false);
     distances[source] = 0;
     previous[source] = -1;
-    priority_queue<pair<int, int>,vector<pair<int, int>>, std::greater<int>> minHeap; //<vertex,weight>
-    minHeap.push({source,0});
+    priority_queue<pair<int, int>> minHeap; //<vertex,weight>
+    minHeap.push({source,0});  //0,0 currently
     while (!minHeap.empty()){
         int u = minHeap.top().first;
+        //cout << "MinHeap top vertex: " << u << endl;
         minHeap.pop();
         if (visited[u]) continue;
         visited[u] = true;
         for (Edge edge: G[u]){
             int v = edge.dst;
+            //cout << "edge.dst: " << v << endl;
             int weight = edge.weight;
+            //cout << "edge.weight: " << weight << endl;
             if (!visited[v] && distances[u] + weight < distances[v]){
                 distances[v] = distances[u] + weight;
                 previous[v] = u;
@@ -31,7 +35,7 @@ vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& prev
 }
 
 vector<int> extract_shortest_path(const vector<int>& distances, const vector<int>& previous, int destination){
-
+return distances;
 }
 
 void print_path(const vector<int>& v, int total){
