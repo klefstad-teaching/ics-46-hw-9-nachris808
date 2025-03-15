@@ -1,10 +1,29 @@
 #include "ladder.h"
+#include <vector>
 
 void error(string word1, string word2, string msg){
     cout << "Error with the following: " << word1 << " and " << word2 << " " << msg;
 }
 bool edit_distance_within(const std::string& str1, const std::string& str2, int d){
     if (d > 1) return 0;
+    vector<vector<int>> calcs(str1.size() + 1, vector<int>(str2.size() + 1));
+    for(int i = 0; i <= str1.size(); ++i)
+        calcs[i][0] = i;
+    for(int j = 0; j <= str2.size(); ++j)
+        calcs[0][j] = j;
+
+    for(int i = 1; i < str1.size(); ++i){
+        for(int j = 1; j <= str2.size(); ++j){
+            if (str1[i-1] == str2[j-1]){
+                calcs[i][j] = calcs[i-1][j-1];
+            }
+            else{
+                calcs[i][j] = 1 + min(calcs[i-1][j], min(calcs[i][j-1], calcs[i-1][j-1]));
+            }
+        }
+    }  
+int dist = calcs[str1.size()][str2.size()];    
+if (dist > 1) return 0;  
 return 1;
 }
 bool is_adjacent(const string& word1, const string& word2){
@@ -47,8 +66,8 @@ void load_words(set<string> & word_list, const string& file_name){
     in.close();
 }
 void print_word_ladder(const vector<string>& ladder){
-    for(auto i: ladder)
-        cout << i << " ";
+    for(int i = 0; i < ladder.size(); ++i)
+        cout << ladder.at(i) << " ";
     cout << endl;
 }
 void verify_word_ladder(){

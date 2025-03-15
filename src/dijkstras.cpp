@@ -2,7 +2,6 @@
 #include <algorithm>
 #include <queue>
 #include <utility>
-#include <functional>
 #include <vector>
 
 vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& previous){
