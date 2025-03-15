@@ -5,7 +5,7 @@ void error(string word1, string word2, string msg){
 }
 bool edit_distance_within(const std::string& str1, const std::string& str2, int d){
     if (d > 1) return 0;
-return 0;
+return 1;
 }
 bool is_adjacent(const string& word1, const string& word2){
     int diff = word1.size() - word2.size();
