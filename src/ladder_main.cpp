@@ -1,13 +1,10 @@
 #include "ladder.h"
 
 int main(){
-
-    /*set<string> word_list;
+    set<string> word_list;
     load_words(word_list, "src/words.txt");
-
-    for (auto it = word_list.begin(); it != word_list.end(); ++it) {
-        std::cout << *it << " ";
-    }
-    */
+    vector<string> word_ladder;
+    word_ladder = generate_word_ladder("cat", "dog", word_list);
+    print_word_ladder(word_ladder);
     return 0;
 }

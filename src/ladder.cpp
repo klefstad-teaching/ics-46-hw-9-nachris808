@@ -6,23 +6,25 @@ void error(string word1, string word2, string msg){
 }
 bool edit_distance_within(const std::string& str1, const std::string& str2, int d){
     if (d > 1) return 0;
-    vector<vector<int>> calcs(str1.size() + 1, vector<int>(str2.size() + 1));
-    for(int i = 0; i <= str1.size(); ++i)
-        calcs[i][0] = i;
-    for(int j = 0; j <= str2.size(); ++j)
-        calcs[0][j] = j;
+    int s1 = str1.size();
+    int s2 = str2.size();
+    vector<vector<int>> dp(s1 + 1, vector<int>(s2 + 1, 0));
+    for(int i = 1; i <= str1.size(); i++)
+        dp[i][0] = i;
+    for(int j = 1; j <= str2.size(); j++)
+        dp[0][j] = j;
 
-    for(int i = 1; i < str1.size(); ++i){
-        for(int j = 1; j <= str2.size(); ++j){
+    for(int i = 1; i <= str1.size(); i++){
+        for(int j = 1; j <= str2.size(); j++){
             if (str1[i-1] == str2[j-1]){
-                calcs[i][j] = calcs[i-1][j-1];
+                dp[i][j] = dp[i-1][j-1];
             }
             else{
-                calcs[i][j] = 1 + min(calcs[i-1][j], min(calcs[i][j-1], calcs[i-1][j-1]));
+                dp[i][j] = 1 + min(dp[i-1][j-1], min(dp[i][j-1], dp[i-1][j]));
             }
         }
     }  
-int dist = calcs[str1.size()][str2.size()];    
+int dist = dp[s1][s2];    
 if (dist > 1) return 0;  
 return 1;
 }
@@ -47,8 +49,9 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
                     visited.insert(word);
                     vector<string> new_ladder = ladder;
                     new_ladder.push_back(word);
-                    if (word == end_word)
+                    if (word == end_word){
                         return new_ladder;
+                    }    
                     ladder_queue.push(new_ladder);
                 }
             }
