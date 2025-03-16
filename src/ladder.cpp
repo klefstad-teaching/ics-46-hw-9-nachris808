@@ -25,11 +25,10 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
             else{
                 dp[i][j] = 1 + min(dp[i-1][j-1], min(dp[i][j-1], dp[i-1][j]));
             }
-        if (i == j && dp[i][j] > 1) return false;    
         }
     }  
 
-return dp[s1][s2] <= 1;
+return dp[s1][s2] == 1;
 }
 
 bool is_adjacent(const string& word1, const string& word2){
@@ -70,9 +69,13 @@ return first_stack;
 
 void load_words(set<string> & word_list, const string& file_name){
     ifstream in(file_name);
+    if (!in.is_open()){
+        error("load", "words", "can't open");
+        return;
+    }
     string s;
     while(getline(in,s)){
-    word_list.insert(s);
+    word_list.emplace(s);
     }
     in.close();
 }
