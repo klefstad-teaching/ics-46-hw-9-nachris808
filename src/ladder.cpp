@@ -28,7 +28,7 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
         }
     }  
 
-return dp[s1][s2] == 1;
+return dp[s1][s2] <= 1;
 }
 
 bool is_adjacent(const string& word1, const string& word2){
