@@ -6,7 +6,7 @@ void error(string word1, string word2, string msg){
 }
 
 bool edit_distance_within(const std::string& str1, const std::string& str2, int d){
-    //Damerau–Levenshtein distance
+    //Damerau–Levenshtein distance w/ optimization
     if (abs(d) > 1) return 0;
     if (str1.length() > str2.length()) return edit_distance_within(str2, str1, d);
     int s1 = str1.size();
@@ -25,6 +25,7 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
             else{
                 dp[i][j] = 1 + min(dp[i-1][j-1], min(dp[i][j-1], dp[i-1][j]));
             }
+        if (i == j && dp[i][j] > 1) return false;    
         }
     }  
 
