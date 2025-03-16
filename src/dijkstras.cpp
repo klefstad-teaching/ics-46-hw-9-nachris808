@@ -1,4 +1,5 @@
 #include "dijkstras.h"
+#include <algorithm>
 #include <queue>
 #include <utility>
 #include <vector>
@@ -31,14 +32,13 @@ vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& prev
 }
 
 vector<int> extract_shortest_path(const vector<int>& distances, const vector<int>& previous, int destination){
-    int cost = distances.at(destination);
     
     vector<int> path;
     path.push_back(destination);
     for(int i = destination; previous[i] != INF; i = previous[i]){
         path.push_back(previous.at(i));
     }
-
+    reverse(path.begin(),path.end()); //added this for extract.shortest.path test
     return path;
 }
 
