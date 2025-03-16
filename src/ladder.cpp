@@ -1,4 +1,5 @@
 #include "ladder.h"
+#include <vector>
 
 void error(string word1, string word2, string msg){
     cout << "Error with the following: " << word1 << " and " << word2 << " " << msg;
@@ -6,9 +7,8 @@ void error(string word1, string word2, string msg){
 
 bool edit_distance_within(const std::string& str1, const std::string& str2, int d){
     //Damerau–Levenshtein distance
-    if (d > 1) return 0;
-    int s1 = str1.size();
-    int s2 = str2.size();
+    int s1 = str1.size(), s2 = str2.size();
+    if (s1 - s2 > d) return 0;
     vector<vector<int>> dp(s1 + 1, vector<int>(s2 + 1, 0));
     for(int i = 1; i <= str1.size(); i++)
         dp[i][0] = i;
@@ -25,16 +25,16 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
             }
         }
     }  
-int dist = dp[s1][s2];    
-if (dist > 1) return 0;  
-return 1;
+    
+return dp[s1][s2] <= 1;
 }
 
 bool is_adjacent(const string& word1, const string& word2){
     int diff = word1.size() - word2.size();
     return edit_distance_within(word1, word2, diff);
 }
-
+//Never reuse words -- visited??
+//Allow word ladder start words to be outside the dictionary -- 
 vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list){
     queue<vector<string>> ladder_queue;
     vector<string> first_stack;
@@ -60,7 +60,7 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
             }
         }
     }
-error(begin_word, end_word, "no word ladder possible");    
+first_stack.clear();
 return first_stack;    
 }
 
@@ -83,7 +83,6 @@ void print_word_ladder(const vector<string>& ladder){
     }    
     cout << endl;
 }
-
 
 void verify_word_ladder(){
     set<string> word_list;
