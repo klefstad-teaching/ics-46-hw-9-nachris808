@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <list>
 #include <vector>
 #include <queue>
 #include <limits>
@@ -8,6 +9,7 @@
 using namespace std;
 
 constexpr int INF = numeric_limits<int>::max();
+
 
 struct Edge {
     int src=0;
@@ -46,6 +48,12 @@ inline void file_to_graph(const string& filename, Graph& G) {
     in >> G;
     in.close();
 }
+
+struct compare_weight{
+    bool operator()(const pair<int,int>& l, const pair<int,int>& r){
+        return l.second > r.second;
+    }
+};
 
 vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& previous);
 vector<int> extract_shortest_path(const vector<int>& distances, const vector<int>& previous, int destination);

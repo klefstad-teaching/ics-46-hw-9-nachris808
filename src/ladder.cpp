@@ -5,6 +5,7 @@ void error(string word1, string word2, string msg){
     cout << "Error with the following: " << word1 << " and " << word2 << " " << msg;
 }
 bool edit_distance_within(const std::string& str1, const std::string& str2, int d){
+    //Damerau–Levenshtein distance
     if (d > 1) return 0;
     int s1 = str1.size();
     int s2 = str2.size();
@@ -69,12 +70,13 @@ void load_words(set<string> & word_list, const string& file_name){
     in.close();
 }
 void print_word_ladder(const vector<string>& ladder){
+    cout << "Word ladder found: ";
     for(int i = 0; i < ladder.size(); ++i)
         cout << ladder.at(i) << " ";
     cout << endl;
 }
+#define my_assert(e) {cout << #e << ((e) ? " passed": " failed") << endl;}
 void verify_word_ladder(){
-    #define my_assert(e) {cout << #e << ((e) ? " passed": " failed") << endl;}
     set<string> word_list;
     load_words(word_list, "words.txt");
     my_assert(generate_word_ladder("cat", "dog", word_list).size() == 4);
