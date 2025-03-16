@@ -7,9 +7,8 @@ int main(){
     int source = 0;
     int dest = 2;
     vector <int> dist = dijkstra_shortest_path(G, source, prev);
-    print_path(dist, 0);
+    //print_path(dist, dist[dest]);
     vector<int> path = extract_shortest_path(dist, prev, dest);
-    print_path(path, 0);
-
+    print_path(path, dist[dest]);
     return 0;
 }

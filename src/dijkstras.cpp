@@ -9,7 +9,7 @@ vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& prev
     vector<int> distances(numVertices,INF);
     vector<bool> visited(numVertices,false);
     distances[source] = 0;
-    previous[source] = 0; //changed from -1
+    previous[source] = INF; 
     priority_queue<pair<int,int>, vector<pair<int,int>>, compare_weight> minHeap; //<vertex,weight>
     minHeap.push({source,0});  //0,0 currently
     while (!minHeap.empty()){
@@ -37,15 +37,24 @@ vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& prev
 }
 
 vector<int> extract_shortest_path(const vector<int>& distances, const vector<int>& previous, int destination){
-return previous;
+    int cost = distances.at(destination);
+    
+    vector<int> path;
+    path.push_back(destination);
+    for(int i = destination; previous[i] != INF; i = previous[i]){
+        path.push_back(previous.at(i));
+    }
+
+    return path;
 }
 
 void print_path(const vector<int>& v, int total){
-    int sum = 0;
     for (auto i : v){
         cout << i << " ";
-        sum += i;
     }
+    if (total == INF) 
+        cout << "No word ladder found";
+    else
+        cout << "Total cost is " << total << endl;
     cout << endl;
-    cout << "Total cost is " << sum << endl;
 }
