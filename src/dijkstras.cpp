@@ -1,5 +1,4 @@
 #include "dijkstras.h"
-#include <algorithm>
 #include <queue>
 #include <utility>
 #include <vector>
@@ -14,20 +13,15 @@ vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& prev
     minHeap.push({source,0});  //0,0 currently
     while (!minHeap.empty()){
         int u = minHeap.top().first;
-        cout << "MinHeap top vertex: " << u << endl;
         minHeap.pop();
         if (visited[u]) 
             continue;
         visited[u] = true;
         for (Edge edge: G[u]){
             int v = edge.dst;
-            cout << "edge.dst: " << v << endl;
             int weight = edge.weight;
-            cout << "edge.weight: " << weight << endl;
             if (!visited[v] && distances[u] + weight < distances[v]){
-                cout << "distances[" << v << "] before: " << distances[v] << endl;
                 distances[v] = distances[u] + weight;
-                cout << "distances[" << v << "] after: " << distances[v] << endl;
                 previous[v] = u;
                 minHeap.push({v,distances[v]});
             } 
@@ -52,9 +46,10 @@ void print_path(const vector<int>& v, int total){
     for (auto i : v){
         cout << i << " ";
     }
+    cout << endl;
     if (total == INF) 
         cout << "No word ladder found";
     else
-        cout << "Total cost is " << total << endl;
+        cout << "Total cost is " << total;
     cout << endl;
 }

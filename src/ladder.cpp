@@ -1,5 +1,6 @@
 #include "ladder.h"
 #include <vector>
+#include <algorithm>
 
 void error(string word1, string word2, string msg){
     cout << "Error with the following: " << word1 << " and " << word2 << " " << msg;
@@ -29,10 +30,12 @@ int dist = dp[s1][s2];
 if (dist > 1) return 0;  
 return 1;
 }
+
 bool is_adjacent(const string& word1, const string& word2){
     int diff = word1.size() - word2.size();
     return edit_distance_within(word1, word2, diff);
 }
+
 vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list){
     queue<vector<string>> ladder_queue;
     vector<string> first_stack;
@@ -61,6 +64,7 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
 error(begin_word, end_word, "no word ladder possible");    
 return first_stack;    
 }
+
 void load_words(set<string> & word_list, const string& file_name){
     ifstream in(file_name);
     string s;
@@ -69,12 +73,14 @@ void load_words(set<string> & word_list, const string& file_name){
     }
     in.close();
 }
+
 void print_word_ladder(const vector<string>& ladder){
     cout << "Word ladder found: ";
     for(auto i: ladder)
         cout << i << " ";
     cout << endl;
 }
+
 #define my_assert(e) {cout << #e << ((e) ? " passed": " failed") << endl;}
 void verify_word_ladder(){
     set<string> word_list;
