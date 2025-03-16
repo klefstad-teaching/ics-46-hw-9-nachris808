@@ -1,12 +1,11 @@
 #include "ladder.h"
-#include <vector>
-#include <algorithm>
 
 void error(string word1, string word2, string msg){
     cout << "Error with the following: " << word1 << " and " << word2 << " " << msg;
 }
+
 bool edit_distance_within(const std::string& str1, const std::string& str2, int d){
-    /*//Damerau–Levenshtein distance
+    //Damerau–Levenshtein distance
     if (d > 1) return 0;
     int s1 = str1.size();
     int s2 = str2.size();
@@ -15,7 +14,6 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
         dp[i][0] = i;
     for(int j = 1; j <= str2.size(); j++)
         dp[0][j] = j;
-    1942
 
     for(int i = 1; i <= str1.size(); i++){
         for(int j = 1; j <= str2.size(); j++){
@@ -27,8 +25,8 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
             }
         }
     }  
-int dist = dp[s1][s2];    */
-if (d > 1) return 0;  //dist
+int dist = dp[s1][s2];    
+if (dist > 1) return 0;  
 return 1;
 }
 
@@ -76,13 +74,17 @@ void load_words(set<string> & word_list, const string& file_name){
 }
 
 void print_word_ladder(const vector<string>& ladder){
-    cout << "Word ladder found: ";
-    for(auto i: ladder)
-        cout << i << " ";
+    if (ladder.empty()) 
+        cout << "No word ladder found.";
+    else{
+        cout << "Word ladder found: ";
+        for(auto i: ladder)
+            cout << i << " ";
+    }    
     cout << endl;
 }
 
-#define my_assert(e) {cout << #e << ((e) ? " passed": " failed") << endl;}
+
 void verify_word_ladder(){
     set<string> word_list;
     load_words(word_list, "words.txt");
