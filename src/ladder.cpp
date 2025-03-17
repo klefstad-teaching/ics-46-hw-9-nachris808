@@ -7,9 +7,9 @@ void error(string word1, string word2, string msg){
 }
 
 bool edit_distance_within(const std::string& str1, const std::string& str2, int d){
-    //Damerau–Levenshtein distance w/ optimization
+   //Damerau–Levenshtein distance w/ optimization
     int s1 = str1.length(), s2 = str2.length(), prev;
-    if (abs(s1-s2) > 1) return 0;
+    if (abs(d) > 1) return 0;
     if (s1 > s2) return edit_distance_within(str2, str1, d);
     vector<int> curr(s2 + 1,0);
     for (int j = 0; j <= s2; ++j){
@@ -19,6 +19,7 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
         prev = curr[0];
         curr[0] = i;
         for (int j = 1; j <= s2; ++j){
+            if (curr[s2] < 2) return curr[s2] < 2;
             int temp = curr[j];
             if (str1[i-1] == str2[j-1])
                 curr[j] = prev;
@@ -32,32 +33,14 @@ return curr[s2] < 2;
 
 
 bool is_adjacent(const string& word1, const string& word2){
-    //Damerau–Levenshtein distance w/ optimization
-    int s1 = word1.length(), s2 = word2.length(), prev;
-    if (abs(s1-s2) > 1) return 0;
-    if (s1 > s2) return is_adjacent(word2, word1);
-    vector<int> curr(s2 + 1,0);
-    for (int j = 0; j <= s2; ++j){
-        curr[j] = j;
-    }
-    for (int i = 1; i <= s1; ++i){
-        prev = curr[0];
-        curr[0] = i;
-        for (int j = 1; j <= s2; ++j){
-            int temp = curr[j];
-            if (word1[i-1] == word2[j-1])
-                curr[j] = prev;
-            else
-                curr[j] = min(prev, min(curr[j-1], curr[j])) + 1;
-            prev = temp;
-        }
-    }
-return curr[s2] < 2;
+    int d = word1.length() - word2.length();
+    return edit_distance_within(word1, word2, d);
 }
 
 //Never reuse words -- visited??
 //Allow word ladder start words to be outside the dictionary -- 
 vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list){
+    if (begin_word == end_word) return {};
     queue<vector<string>> ladder_queue;
     vector<string> first_stack;
     first_stack.push_back(begin_word);
