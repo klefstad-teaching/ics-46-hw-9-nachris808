@@ -1,4 +1,5 @@
 #include "ladder.h"
+#include <unordered_set>
 #include <vector>
 
 void error(string word1, string word2, string msg){
@@ -8,6 +9,7 @@ void error(string word1, string word2, string msg){
 bool edit_distance_within(const std::string& str1, const std::string& str2, int d){
     //Damerau–Levenshtein distance w/ optimization
     int s1 = str1.length(), s2 = str2.length(), prev;
+    if (abs(s1-s2) > 1) return 0;
     if (s1 > s2) return edit_distance_within(str2, str1, d);
     vector<int> curr(s2 + 1,0);
     for (int j = 0; j <= s2; ++j){
@@ -30,11 +32,27 @@ return curr[s2] < 2;
 
 
 bool is_adjacent(const string& word1, const string& word2){
-    int d = word1.length() - word2.length();
-    if (abs(d) > 1) 
-        return 0;
-    else
-        return edit_distance_within(word1, word2, d);
+    //Damerau–Levenshtein distance w/ optimization
+    int s1 = word1.length(), s2 = word2.length(), prev;
+    if (abs(s1-s2) > 1) return 0;
+    if (s1 > s2) return is_adjacent(word2, word1);
+    vector<int> curr(s2 + 1,0);
+    for (int j = 0; j <= s2; ++j){
+        curr[j] = j;
+    }
+    for (int i = 1; i <= s1; ++i){
+        prev = curr[0];
+        curr[0] = i;
+        for (int j = 1; j <= s2; ++j){
+            int temp = curr[j];
+            if (word1[i-1] == word2[j-1])
+                curr[j] = prev;
+            else
+                curr[j] = min(prev, min(curr[j-1], curr[j])) + 1;
+            prev = temp;
+        }
+    }
+return curr[s2] < 2;
 }
 
 //Never reuse words -- visited??
@@ -44,22 +62,21 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
     vector<string> first_stack;
     first_stack.push_back(begin_word);
     ladder_queue.push(first_stack);
-    set<string> visited;
-    visited.insert(begin_word);
+    unordered_set<string> visited{begin_word};
     while (!ladder_queue.empty()){
         vector<string> ladder = std::move(ladder_queue.front());
         ladder_queue.pop();
         string& last_word = ladder.back();
         for(const string& word: word_list){
             if (is_adjacent(last_word, word)){
-                if (!visited.contains(word)){
+                if (visited.find(word) == visited.end()){
                     vector<string> new_ladder = ladder;
-                    new_ladder.push_back(std::move(word));
+                    new_ladder.push_back(word);
                     if (word == end_word){
                         return new_ladder;
                     }    
                     visited.insert(word);
-                    ladder_queue.push(new_ladder);
+                    ladder_queue.push(std::move(new_ladder));
                 }
             }
         }
@@ -74,11 +91,8 @@ void load_words(set<string> & word_list, const string& file_name){
         error("load", "words", "can't open");
         return;
     }
-    string s;
-    while(getline(in,s)){
-    word_list.emplace(std::move(s));
-    }
-    in.close();
+    for (string s; in >> s;)
+        word_list.insert(s);
 }
 
 void print_word_ladder(const vector<string>& ladder){
