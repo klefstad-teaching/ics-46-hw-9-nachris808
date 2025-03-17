@@ -6,28 +6,10 @@ void error(string word1, string word2, string msg){
 }
 
 bool edit_distance_within(const std::string& str1, const std::string& str2, int d){
-    //Damerau–Levenshtein distance w/ optimization
-    if (str1.length() > str2.length()) return edit_distance_within(str2, str1, d);
-    int s1 = str1.size();
-    int s2 = str2.size();
-    vector<vector<int>> dp(s1 + 1, vector<int>(s2 + 1, 0));
-    for(int i = 1; i <= str1.size(); i++)
-        dp[i][0] = i;
-    for(int j = 1; j <= str2.size(); j++)
-        dp[0][j] = j;
-
-    for(int i = 1; i <= str1.size(); i++){
-        for(int j = 1; j <= str2.size(); j++){
-            if (str1[i-1] == str2[j-1]){
-                dp[i][j] = dp[i-1][j-1];
-            }
-            else{
-                dp[i][j] = 1 + min(dp[i-1][j-1], min(dp[i][j-1], dp[i-1][j]));
-            }
-        }
-    }  
-
-return dp[s1][s2];
+    if (abs(d) > 1) 
+        return 0;
+    else
+        return 1;
 }
 
 bool is_adjacent(const string& word1, const string& word2){
@@ -35,7 +17,7 @@ bool is_adjacent(const string& word1, const string& word2){
     if (abs(d) > 1) 
         return 0;
     else
-        return edit_distance_within(word1, word2, d);
+        return edit_distance_within(word1, word2, d) == 1;
 }
 
 //Never reuse words -- visited??
