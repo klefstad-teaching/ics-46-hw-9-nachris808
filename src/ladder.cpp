@@ -33,8 +33,7 @@ bool is_adjacent(const string& word1, const string& word2){
     if (abs(d) > 1) 
         return 0;
     else
-        //return edit_distance_within(word1, word2, d);
-        return 1;
+        return edit_distance_within(word1, word2, d);
 }
 
 //Never reuse words -- visited??
